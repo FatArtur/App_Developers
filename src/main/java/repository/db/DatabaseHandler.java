@@ -1,26 +1,36 @@
 package repository.db;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 public class DatabaseHandler {
-    private final static String connectionString = "jdbc:mysql://localhost/CRUD_schema" +
-            "?useTimezone=true&serverTimezone=UTC";
-    private final static String DB_USER = "root";
-    private final static String DB_PASSWORD = "fotya2227";
-    private static Connection dbConnection;
+    private static PreparedStatement statement;
+    private static Properties property;
+    private static String DB_USER;
+    private static String DB_PASSWORD;
+    private static String DB_HOST;
 
-    public static Connection getDbConnection() throws SQLException {
-        dbConnection = DriverManager.getConnection(connectionString, DB_USER, DB_PASSWORD);
-        return dbConnection;
+
+    static {
+        FileInputStream fis;
+        property = new Properties();
+        try {
+            fis = new FileInputStream("src/main/resources/application.properties");
+            property.load(fis);
+            DB_HOST = property.getProperty("DB_HOST");
+            DB_USER = property.getProperty("DB_USER");
+            DB_PASSWORD = property.getProperty("DB_PASSWORD");
+            fis.close();
+        } catch (IOException e) {
+            System.out.println("ОШИБКА: Файл свойств отсуствует!");
+        }
     }
 
-    public static ResultSet readDBase(String query) throws SQLException {
-        Statement statement = getDbConnection().createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
-        return resultSet;
-    }
-    public static void writeDBase(String query) throws SQLException{
-        Statement statement = getDbConnection().createStatement();
-        statement.executeQuery(query);
+    public static PreparedStatement getStatement(String query) throws SQLException {
+        Connection dbConnection = DriverManager.getConnection(DB_HOST, DB_USER, DB_PASSWORD);
+        statement = dbConnection.prepareStatement(query);
+        return statement;
     }
 }

@@ -21,8 +21,4 @@ public class Skill {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return getId() + " : " + getName();
-    }
 }

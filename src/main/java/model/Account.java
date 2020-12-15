@@ -26,7 +26,7 @@ public class Account {
     }
 
     public void setAccountStatus(AccountStatus accountStatus) {
-        this.accountStatus = accountStatus;
-    }
+        this.accountStatus = accountStatus; }
+
 }
 

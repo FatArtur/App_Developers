@@ -50,8 +50,8 @@ public class JavaDBDeveloperRepository  implements DeveloperRepository {
     }
 
     public Developer update(Developer val) throws Exception {
-        SQL = String.format("UPDATE %s SET name = '%s', account_id = '%s' where idDeveloper =%s", DB_TABLE_1,
-                val.getName(), val.getAccount() ,val.getId());
+        SQL = String.format("UPDATE %s SET name = '%s', account_id = %s where idDeveloper =%s", DB_TABLE_1,
+                val.getName(), val.getAccount().getId() ,val.getId());
         DatabaseHandler.getStatement(SQL).executeUpdate();
         SQL = String.format("delete from %s where developer_id=%s", DB_TABLE_2, val.getId());
         DatabaseHandler.getStatement(SQL).execute();

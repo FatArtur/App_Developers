@@ -40,9 +40,5 @@ public class Developer {
         this.name = name;
     }
 
-//    @Override
-//    public String toString() {
-//        return "\n" + getId() + " : " + getName() + " : " + getAccount() + ":" + getSkill().toString();
-//    }
 }
 

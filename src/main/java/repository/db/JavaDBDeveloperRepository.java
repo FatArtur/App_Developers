@@ -6,7 +6,6 @@ import model.Account;
 import model.Developer;
 import model.Skill;
 import repository.DeveloperRepository;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,6 +21,16 @@ public class JavaDBDeveloperRepository  implements DeveloperRepository {
         SQL = String.format("INSERT INTO %s (name, account_id) VALUES ('%s', '%s')", DB_TABLE_1,
                 val.getName(), val.getAccount().getId());
         DatabaseHandler.getStatement(SQL).execute();
+        SQL = String.format("SELECT idDeveloper from %s where name='%s'", DB_TABLE_1,
+                val.getName());
+        ResultSet resultSet = DatabaseHandler.getStatement(SQL).executeQuery();
+        while (resultSet.next()){
+            try {
+                val.setId(resultSet.getLong(1));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         return saveToSkillList(val);
     }
 
@@ -44,9 +53,9 @@ public class JavaDBDeveloperRepository  implements DeveloperRepository {
         SQL = String.format("UPDATE %s SET name = '%s', account_id = '%s' where idDeveloper =%s", DB_TABLE_1,
                 val.getName(), val.getAccount() ,val.getId());
         DatabaseHandler.getStatement(SQL).executeUpdate();
-
-        SQL = String.format("select* from %s where name='%s' order by idAccount", DB_TABLE_1, val.getName());
-        return sqlToDeveloper(DatabaseHandler.getStatement(SQL).executeQuery());
+        SQL = String.format("delete from %s where developer_id=%s", DB_TABLE_2, val.getId());
+        DatabaseHandler.getStatement(SQL).execute();
+        return saveToSkillList(val);
     }
 
     private Developer sqlToDeveloper(ResultSet resultSet) throws SQLException {
@@ -99,16 +108,6 @@ public class JavaDBDeveloperRepository  implements DeveloperRepository {
     }
 
     private Developer saveToSkillList(Developer val) throws SQLException{
-        SQL = String.format("SELECT idDeveloper from %s where name='%s'", DB_TABLE_1,
-                val.getName());
-        ResultSet resultSet = DatabaseHandler.getStatement(SQL).executeQuery();
-        while (resultSet.next()){
-            try {
-                val.setId(resultSet.getLong(1));
-            } catch (Exception e){
-                System.out.println("Error is here!!!");
-            }
-        }
         List<Skill> list = val.getSkill();
         list.forEach(s -> {SQL =String.format("INSERT INTO %s (developer_id, skill_id) VALUES ('%s', '%s')",
                 DB_TABLE_2, val.getId(), s.getId());

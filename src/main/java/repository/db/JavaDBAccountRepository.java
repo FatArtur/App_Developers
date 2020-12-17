@@ -3,7 +3,6 @@ package repository.db;
 import model.Account;
 import model.AccountStatus;
 import repository.AccountRepository;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

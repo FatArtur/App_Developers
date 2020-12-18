@@ -6,11 +6,17 @@ import java.sql.*;
 import java.util.Properties;
 
 public class DatabaseHandler {
+    private static DatabaseHandler databaseHandler;
     private static PreparedStatement statement;
     private static Properties property;
     private static String DB_USER;
     private static String DB_PASSWORD;
     private static String DB_HOST;
+    private static Connection dbConnection;
+
+    private DatabaseHandler() throws SQLException{
+        dbConnection = DriverManager.getConnection(DB_HOST, DB_USER, DB_PASSWORD);
+    }
 
 
     static {
@@ -29,7 +35,9 @@ public class DatabaseHandler {
     }
 
     public static PreparedStatement getStatement(String query) throws SQLException {
-        Connection dbConnection = DriverManager.getConnection(DB_HOST, DB_USER, DB_PASSWORD);
+        if (databaseHandler == null) {
+            databaseHandler = new DatabaseHandler();
+        }
         statement = dbConnection.prepareStatement(query);
         return statement;
     }

@@ -12,14 +12,13 @@ import java.util.List;
 
 
 public class JavaDBDeveloperRepository  implements DeveloperRepository {
-    private final static String DB_TABLE_DEVELOPER = "developer";
-    private final static String DB_TABLE_SKILL_LIST = "SkillList";
-    private final static String DB_TABLE_ACCOUNT = "Account";
-    private final static String DB_TABLE_SKILL = "Skill";
-    private static String SQL;
+    private final static String DB_TABLE_DEVELOPER = "developers";
+    private final static String DB_TABLE_SKILL_LIST = "developer_skills";
+    private final static String DB_TABLE_ACCOUNT = "Accounts";
+    private final static String DB_TABLE_SKILL = "Skills";
 
     public Developer save(Developer val) throws Exception {
-        SQL = String.format("INSERT INTO %s (name, account_id) VALUES ('%s', '%s')", DB_TABLE_DEVELOPER,
+        String SQL = String.format("INSERT INTO %s (name, account_id) VALUES ('%s', '%s')", DB_TABLE_DEVELOPER,
                 val.getName(), val.getAccount().getId());
         DatabaseHandler.getStatement(SQL).execute();
         SQL = String.format("SELECT idDeveloper from %s where name='%s'", DB_TABLE_DEVELOPER,
@@ -36,26 +35,26 @@ public class JavaDBDeveloperRepository  implements DeveloperRepository {
     }
 
     public void deleteById(Long id) throws Exception {
-        SQL = String.format("delete from %s where idDeveloper=%s", DB_TABLE_DEVELOPER, id);
+        String SQL = String.format("delete from %s where idDeveloper=%s", DB_TABLE_DEVELOPER, id);
         DatabaseHandler.getStatement(SQL).execute();
     }
 
     public Developer getByID(Long id) throws Exception {
-        SQL = String.format("select idDeveloper, Developer.name, Account.idAccount, Account.name, " +
-                        "Account.AccountStatus from %s INNER JOIN %s ON Developer.account_id = Account.idAccount " +
+        String SQL = String.format("select idDeveloper, Developers.name, Accounts.idAccount, Accounts.name, " +
+                        "Accounts.AccountStatus from %s INNER JOIN %s ON Developers.account_id = Accounts.idAccount " +
                         "where idDeveloper=%s", DB_TABLE_DEVELOPER, DB_TABLE_ACCOUNT, id);
         return sqlToDeveloper(DatabaseHandler.getStatement(SQL).executeQuery());
     }
 
     public List<Developer> getAll() throws Exception {
-        SQL = String.format("select idDeveloper, Developer.name, Account.idAccount, Account.name, " +
-                "Account.AccountStatus from %s INNER JOIN %s ON Developer.account_id = Account.idAccount",
-                DB_TABLE_DEVELOPER, DB_TABLE_ACCOUNT);
+        String SQL = String.format("select idDeveloper, Developers.name, Accounts.idAccount, Accounts.name, " +
+                "Accounts.AccountStatus from %s INNER JOIN %s ON Developers.account_id = Accounts.idAccount " +
+                        "order by idDeveloper", DB_TABLE_DEVELOPER, DB_TABLE_ACCOUNT);
         return sqlToDevelopers(DatabaseHandler.getStatement(SQL).executeQuery());
     }
 
     public Developer update(Developer val) throws Exception {
-        SQL = String.format("UPDATE %s SET name = '%s', account_id = %s where idDeveloper =%s", DB_TABLE_DEVELOPER,
+        String SQL = String.format("UPDATE %s SET name = '%s', account_id = %s where idDeveloper =%s", DB_TABLE_DEVELOPER,
                 val.getName(), val.getAccount().getId() ,val.getId());
         DatabaseHandler.getStatement(SQL).executeUpdate();
         SQL = String.format("delete from %s where developer_id=%s", DB_TABLE_SKILL_LIST, val.getId());
@@ -100,9 +99,9 @@ public class JavaDBDeveloperRepository  implements DeveloperRepository {
     private List<Skill> convertToSkill(Long val) throws SQLException {
         List<Skill> list = new ArrayList<>();
         Skill skill;
-        SQL = String.format("select Skill.idSkill, Skill.name " +
-                "from %s INNER JOIN %s ON Skill.idSkill = SkillList.skill_id " +
-                "where SkillList.developer_id = %s", DB_TABLE_SKILL, DB_TABLE_SKILL_LIST, val);
+        String SQL = String.format("select Skills.idSkill, Skills.name " +
+                "from %s INNER JOIN %s ON Skills.idSkill = developer_skills.skill_id " +
+                "where developer_skills.developer_id = %s", DB_TABLE_SKILL, DB_TABLE_SKILL_LIST, val);
         ResultSet resultSet = DatabaseHandler.getStatement(SQL).executeQuery();
         while (resultSet.next()){
             try {
@@ -119,7 +118,7 @@ public class JavaDBDeveloperRepository  implements DeveloperRepository {
 
     private Developer saveToSkillList(Developer val) throws SQLException{
         List<Skill> list = val.getSkill();
-        list.forEach(s -> {SQL =String.format("INSERT INTO %s (developer_id, skill_id) VALUES ('%s', '%s')",
+        list.forEach(s -> {String SQL =String.format("INSERT INTO %s (developers_id, skills_id) VALUES ('%s', '%s')",
                 DB_TABLE_SKILL_LIST, val.getId(), s.getId());
             try {
                 DatabaseHandler.getStatement(SQL).execute();

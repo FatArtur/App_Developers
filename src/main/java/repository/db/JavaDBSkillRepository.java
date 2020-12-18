@@ -8,33 +8,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JavaDBSkillRepository implements SkillRepository {
-    private final static String DB_TABLE = "skill";
-    private static String SQL;
+    private final static String DB_TABLE = "skills";
 
     public Skill save(Skill val) throws Exception {
-        SQL = String.format("INSERT INTO %s (name) VALUES ('%s')", DB_TABLE, val.getName());
+        String SQL = String.format("INSERT INTO %s (name) VALUES ('%s')", DB_TABLE, val.getName());
         DatabaseHandler.getStatement(SQL).execute();
         SQL = String.format("select* from %s where name='%s' order by idskill", DB_TABLE, val.getName());
         return sqlToSkill(DatabaseHandler.getStatement(SQL).executeQuery());
     }
 
     public void deleteById(Long id) throws Exception {
-        SQL = String.format("delete from %s where idskill=%s", DB_TABLE, id);
+        String SQL = String.format("delete from %s where idskill=%s", DB_TABLE, id);
         DatabaseHandler.getStatement(SQL).execute();
     }
 
     public Skill getByID(Long id) throws Exception {
-        SQL = String.format("select* from %s where idskill=%s order by idskill", DB_TABLE, id);
+        String SQL = String.format("select* from %s where idskill=%s order by idskill", DB_TABLE, id);
         return sqlToSkill(DatabaseHandler.getStatement(SQL).executeQuery());
     }
 
     public List<Skill> getAll() throws Exception {
-        SQL = String.format("select* from %s order by idskill", DB_TABLE);
+        String SQL = String.format("select* from %s order by idskill", DB_TABLE);
         return sqlToSkills(DatabaseHandler.getStatement(SQL).executeQuery());
     }
 
     public Skill update(Skill val) throws Exception {
-        SQL = String.format("UPDATE %s SET name = '%s' where idskill =%s", DB_TABLE, val.getName(), val.getId());
+        String SQL = String.format("UPDATE %s SET name = '%s' where idskill =%s", DB_TABLE, val.getName(), val.getId());
         DatabaseHandler.getStatement(SQL).executeUpdate();
         SQL = String.format("select* from %s where name='%s' order by idskill", DB_TABLE, val.getName());
         return sqlToSkill(DatabaseHandler.getStatement(SQL).executeQuery());

@@ -1,8 +1,16 @@
 package model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Accounts", schema = "public")
 public class Account {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column (name = "name")
     private String name;
+    @Column(name = "AccountStatus")
     private AccountStatus accountStatus;
 
     public String getName() {

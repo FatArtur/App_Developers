@@ -4,10 +4,12 @@ import model.Account;
 import model.AccountStatus;
 import repository.AccountRepository;
 import repository.db.JavaDBAccountRepository;
+import repository.hibernate.HibernateAccountRepository;
+
 import java.util.List;
 
 public class AccountController {
-    private AccountRepository repo = new JavaDBAccountRepository();
+    private AccountRepository repo = new HibernateAccountRepository();
 
     public Account create(String val) throws Exception {
         Account account = new Account();

@@ -1,8 +1,11 @@
 import controller.AccountController;
+import model.Account;
+import model.AccountStatus;
 import view.AccountView;
 import view.DeveloperView;
 import view.SkillView;
 
+import java.util.List;
 
 
 public class Test {
@@ -13,8 +16,9 @@ public class Test {
 //        developerView.run();
 
         AccountController accountController = new AccountController();
-        accountController.getByID("2");
-
-
+//        accountController.getByID("3");
+//        System.out.println(accountController.getByID("2"));
+//        accountController.create("Test");
+//        accountController.getAll();
     }
 }

@@ -10,7 +10,7 @@ public class Account {
     private Long id;
     @Column (name = "name")
     private String name;
-    @Column(name = "AccountStatus")
+    @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
     public String getName() {
@@ -36,5 +36,13 @@ public class Account {
     public void setAccountStatus(AccountStatus accountStatus) {
         this.accountStatus = accountStatus; }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", accountStatus=" + accountStatus +
+                '}';
+    }
 }
 

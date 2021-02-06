@@ -14,7 +14,10 @@ public class Developer {
     private Account account;
     @Column(name = "name")
     private String name;
-    @ManyToMany(mappedBy = "developer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "developer_skills",
+            joinColumns = @JoinColumn(name = "developer_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private List<Skill> skill;
 
     public List<Skill> getSkill() {

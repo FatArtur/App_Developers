@@ -1,50 +1,48 @@
 package repository.hibernate;
 
 import model.Account;
-import model.AccountStatus;
+import model.Skill;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import repository.AccountRepository;
+import repository.SkillRepository;
 
 import java.util.List;
 
-public class HibernateAccountRepository implements AccountRepository {
-
+public class HibernateSkillRepository implements SkillRepository {
     @Override
-    public Account save(Account val) throws Exception {
-        val.setAccountStatus(AccountStatus.ACTIVE);
+    public Skill save(Skill val) throws Exception {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Long generatedId = (Long) session.save(val);
         transaction.commit();
-        val = session.get(Account.class, generatedId);
+        val = session.get(Skill.class, generatedId);
         session.close();
         return val;
     }
 
     @Override
     public void deleteById(Long id) throws Exception {
-        Account account = getByID(id);
+        Skill skill = getByID(id);
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.delete(account);
+        session.delete(skill);
         transaction.commit();
         session.close();
     }
 
     @Override
-    public Account getByID(Long id) throws Exception {
-        return HibernateUtil.getSessionFactory().openSession().get(Account.class, id);
+    public Skill getByID(Long id) throws Exception {
+        return HibernateUtil.getSessionFactory().openSession().get(Skill.class, id);
     }
 
     @Override
-    public List<Account> getAll() throws Exception {
-        List<Account> list = HibernateUtil.getSessionFactory().openSession().createQuery("From Account").list();
+    public List<Skill> getAll() throws Exception {
+        List<Skill> list = HibernateUtil.getSessionFactory().openSession().createQuery("From Skill").list();
         return list;
     }
 
     @Override
-    public Account update(Account val) throws Exception {
+    public Skill update(Skill val) throws Exception {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.update(val);

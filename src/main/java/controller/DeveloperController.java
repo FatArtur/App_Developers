@@ -3,40 +3,46 @@ package controller;
 import model.Account;
 import model.Developer;
 import model.Skill;
+import repository.AccountRepository;
 import repository.DeveloperRepository;
+import repository.SkillRepository;
 import repository.db.JavaDBAccountRepository;
 import repository.db.JavaDBDeveloperRepository;
 import repository.db.JavaDBSkillRepository;
+import repository.hibernate.HibernateAccountRepository;
+import repository.hibernate.HibernateDeveloperRepository;
+import repository.hibernate.HibernateSkillRepository;
+
 import java.util.List;
 
 public class DeveloperController {
-    private DeveloperRepository repo = new JavaDBDeveloperRepository();
+    private DeveloperRepository repo = new HibernateDeveloperRepository();
 
-    private JavaDBAccountRepository createAccountRep(){
-        return new JavaDBAccountRepository();
+    private AccountRepository createAccountRep(){
+        return new HibernateAccountRepository();
     }
 
-    private JavaDBSkillRepository createSkillRep(){
-        return new JavaDBSkillRepository();
+    private SkillRepository createSkillRep(){
+        return new HibernateSkillRepository();
     }
 
     public List<Account> getAccounts() throws Exception{
-        JavaDBAccountRepository accountRepository = createAccountRep();
+        AccountRepository accountRepository = createAccountRep();
         return accountRepository.getAll();
     }
 
     public Account giveAccount(String s) throws Exception{
-        JavaDBAccountRepository accountRepository = createAccountRep();
+        AccountRepository accountRepository = createAccountRep();
         return accountRepository.getByID(Long.parseLong(s));
     }
 
     public List<Skill> getSkills() throws Exception{
-        JavaDBSkillRepository skillRepository = createSkillRep();
+        SkillRepository skillRepository = createSkillRep();
         return skillRepository.getAll();
     }
 
     public Skill giveSkill(String s) throws Exception{
-        JavaDBSkillRepository skillRepository = createSkillRep();
+        SkillRepository skillRepository = createSkillRep();
         return skillRepository.getByID(Long.parseLong(s));
     }
 

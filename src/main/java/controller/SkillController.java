@@ -3,10 +3,12 @@ package controller;
 import model.Skill;
 import repository.SkillRepository;
 import repository.db.JavaDBSkillRepository;
+import repository.hibernate.HibernateSkillRepository;
+
 import java.util.List;
 
 public class SkillController {
-    private SkillRepository repo = new JavaDBSkillRepository();
+    private SkillRepository repo = new HibernateSkillRepository();
 
     public Skill create(String val) throws Exception {
         Skill skill = new Skill();

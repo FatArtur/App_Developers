@@ -15,8 +15,9 @@ public class HibernateAccountRepository implements AccountRepository {
         val.setAccountStatus(AccountStatus.ACTIVE);
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(val);
+        Long generator_id = (Long) session.save(val);
         transaction.commit();
+        val = session.get(Account.class, generator_id);
         session.close();
         return val;
     }
@@ -49,6 +50,6 @@ public class HibernateAccountRepository implements AccountRepository {
         session.update(val);
         transaction.commit();
         session.close();
-        return getByID(val.getId());
+        return val;
     }
 }

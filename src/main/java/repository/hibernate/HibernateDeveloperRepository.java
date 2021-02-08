@@ -32,7 +32,8 @@ public class HibernateDeveloperRepository implements DeveloperRepository {
     @Override
     public Developer getByID(Long id) throws Exception {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Developer developer = session.get(Developer.class, id);
+        Developer developer = session.createQuery("SELECT a FROM Developer a JOIN FETCH a.skill WHERE a.id = " + id,
+                Developer.class).getSingleResult();
         session.close();
         return developer;
     }
@@ -40,7 +41,8 @@ public class HibernateDeveloperRepository implements DeveloperRepository {
     @Override
     public List<Developer> getAll() throws Exception {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Developer> developer = session.createQuery("From Developer").list();
+        List<Developer> developer = session.createQuery("SELECT DISTINCT a FROM Developer a left " +
+                "join fetch a.skill order by a.id").getResultList();
         session.close();
         return developer;
     }

@@ -31,13 +31,18 @@ public class HibernateDeveloperRepository implements DeveloperRepository {
 
     @Override
     public Developer getByID(Long id) throws Exception {
-        return HibernateUtil.getSessionFactory().openSession().get(Developer.class, id);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Developer developer = session.get(Developer.class, id);
+        session.close();
+        return developer;
     }
 
     @Override
     public List<Developer> getAll() throws Exception {
-        List<Developer> list = HibernateUtil.getSessionFactory().openSession().createQuery("From Developer").list();
-        return list;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Developer> developer = session.createQuery("From Developer").list();
+        session.close();
+        return developer;
     }
 
     @Override

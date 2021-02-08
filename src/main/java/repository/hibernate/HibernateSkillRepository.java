@@ -1,11 +1,9 @@
 package repository.hibernate;
 
-import model.Account;
 import model.Skill;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import repository.SkillRepository;
-
 import java.util.List;
 
 public class HibernateSkillRepository implements SkillRepository {
@@ -32,13 +30,18 @@ public class HibernateSkillRepository implements SkillRepository {
 
     @Override
     public Skill getByID(Long id) throws Exception {
-        return HibernateUtil.getSessionFactory().openSession().get(Skill.class, id);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Skill skill = session.get(Skill.class, id);
+        session.close();
+        return skill;
     }
 
     @Override
     public List<Skill> getAll() throws Exception {
-        List<Skill> list = HibernateUtil.getSessionFactory().openSession().createQuery("From Skill").list();
-        return list;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Skill> skills = session.createQuery("From Skill").list();
+        session.close();
+        return skills;
     }
 
     @Override

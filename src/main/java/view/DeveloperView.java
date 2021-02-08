@@ -63,7 +63,8 @@ public class DeveloperView {
                         System.out.println(Message.NOVALUE);
                 }
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println("Message -> " + e.getMessage());
+                e.printStackTrace();
             }
         }
 

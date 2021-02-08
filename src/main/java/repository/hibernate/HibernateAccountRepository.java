@@ -34,12 +34,17 @@ public class HibernateAccountRepository implements AccountRepository {
 
     @Override
     public Account getByID(Long id) throws Exception {
-        return HibernateUtil.getSessionFactory().openSession().get(Account.class, id);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Account account = session.get(Account.class, id);
+        session.close();
+        return account;
     }
 
     @Override
     public List<Account> getAll() throws Exception {
-        List<Account> list = HibernateUtil.getSessionFactory().openSession().createQuery("From Account").list();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Account> list = session.createQuery("From Account").list();
+        session.close();
         return list;
     }
 
